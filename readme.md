@@ -18,8 +18,8 @@
 
 ### Link de los slides
 
-- [x] Link slide
+- [x] [Link slide](https://github.com/ISIS3301/proyecto1/blob/main/docs/Presentaci%C3%B3n%20diapositiva%20Marca%20creativa%20Doodle%20Blanco%20y%20marr%C3%B3n.pdf)
 
 ### Link del video
 
-- [x] Link video
+- [x] [Link video](https://youtu.be/JtI15GMBy2Q)
