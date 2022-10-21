@@ -18,8 +18,8 @@
 
 ### Link de los slides
 
-- [x]
+- [x] Link slide
 
 ### Link del video
 
-- [x]
+- [x] Link video
