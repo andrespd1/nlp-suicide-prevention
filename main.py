@@ -1,23 +1,30 @@
 import pandas as pd
-import json
-import nltk
-from library_project import tokenizer
 
-from typing import Optional
-from fastapi import FastAPI
-from DataModel import DataModel
+from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from joblib import load, dump
-from typing import List
-from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from sklearn import svm
-from sklearn.metrics import precision_score, recall_score, f1_score
 from fastapi.responses import HTMLResponse
 from sklearn.feature_extraction.text import TfidfVectorizer
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
+
 
 app = FastAPI()
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/", response_class= HTMLResponse)
 def read_root():
@@ -35,23 +42,6 @@ def read_root():
         crossorigin="anonymous" />
 
         <title>Proyecto BI</title>
-        <script lang="JavaScript">
-        function sendBodyToPost(form){
-            fetch('http://localhost:8000/predict',{
-            method: 'POST',
-            headers: {
-                'Accept':'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "text":form.inputText.value,
-                "classification":null
-            })
-            })
-            .then(response => response.json())
-            .then(response => console.log(JSON.stringify(response)))
-        }
-        </script>
     </head>
     <body>
         <div class="card text-center">
@@ -62,19 +52,14 @@ def read_root():
             Ingrese un texto el cual quiera predecir si tiene intenciones de
             suicido
             </p>
-            <form id="bi_project">
+            <form id="form" method="post" action="/predict">
             <textarea
                 class="form-control"
-                name="inputText"
+                name="text"
                 rows="3"
                 placeholder="Escriba aquí..."
                 style="max-width: 60%; margin: auto"></textarea>
-            <button
-                type="submit"
-                class="btn btn-primary mb-3"
-                onclick="sendBodyToPost(this.form)">
-                Confirm identity
-            </button>
+            <button type="submit" class="btn btn-primary mb-3">Predict</button>
             </form>
         </div>
         <div class="card-footer text-muted">Grupo 10 - Los Bffis</div>
@@ -86,16 +71,14 @@ def read_root():
 
 
 @app.post("/predict")
-def make_predictions(dataModel: List[DataModel]):
-    lista = []
-    for i in dataModel:
-        lista.append(i.dict())
+async def make_predictions(request: Request ):
+    lista = [dict(jsonable_encoder(await request.form()))]
+    print(lista)
     df = pd.DataFrame(lista)
-    df.columns = dataModel[0].columns()
-
+    df.columns = ["text"]
+    print(df)
     model = load("assets/modelo.joblib")
     result = model.predict(df)
     print(result)
     dic = {"resultado": result.tolist()}
-    dic = {"resultado": []}
     return dic
