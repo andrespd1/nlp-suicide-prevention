@@ -11,6 +11,23 @@
       crossorigin="anonymous" />
 
     <title>Proyecto BI</title>
+    <script lang="JavaScript">
+      function sendBodyToPost(form){
+        fetch('http://localhost:8000/predict',{
+          method: 'POST',
+          headers: {
+            'Accept':'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "text":form.inputText.value,
+            "classification":null
+          })
+        })
+        .then(response => response.json())
+        .then(response => console.log(JSON.stringify(response)))
+      }
+    </script>
   </head>
   <body>
     <div class="card text-center">
@@ -21,13 +38,20 @@
           Ingrese un texto el cual quiera predecir si tiene intenciones de
           suicido
         </p>
-        <textarea
-          class="form-control"
-          id="exampleFormControlTextarea1"
-          rows="3"
-          placeholder="Escriba aquí..."
-          style="max-width: 60%; margin: auto"></textarea>
-        <a href="#" class="btn btn-primary" style="margin-top: 1%">Predecir</a>
+        <form id="bi_project">
+          <textarea
+            class="form-control"
+            name="inputText"
+            rows="3"
+            placeholder="Escriba aquí..."
+            style="max-width: 60%; margin: auto"></textarea>
+          <button
+            type="submit"
+            class="btn btn-primary mb-3"
+            onclick="sendBodyToPost(this.form)">
+            Confirm identity
+          </button>
+        </form>
       </div>
       <div class="card-footer text-muted">Grupo 10 - Los Bffis</div>
     </div>
