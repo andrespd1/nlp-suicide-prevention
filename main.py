@@ -87,15 +87,15 @@ def read_root():
 
 @app.post("/predict")
 def make_predictions(dataModel: List[DataModel]):
-    # lista = []
-    # for i in dataModel:
-    #     lista.append(i.dict())
-    # df = pd.DataFrame(lista)
-    # df.columns = dataModel[0].columns()
+    lista = []
+    for i in dataModel:
+        lista.append(i.dict())
+    df = pd.DataFrame(lista)
+    df.columns = dataModel[0].columns()
 
     model = load("assets/modelo.joblib")
-    # result = model.predict(df)
-    # print(result)
-    # dic = {"resultado": result.tolist()}
+    result = model.predict(df)
+    print(result)
+    dic = {"resultado": result.tolist()}
     dic = {"resultado": []}
     return dic
