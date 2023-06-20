@@ -6,7 +6,7 @@ This is a very useful tool to predict which users have depression or have attemp
 
 ---
 
-## What We have used to built this app?
+## What we have used to built this app?
 - Python Jupyter Notebooks
 - NLTK
 - FastAPI
